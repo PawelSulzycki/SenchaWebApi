@@ -1,0 +1,77 @@
+﻿<html>
+<head>
+    <script>
+
+        function myFunction() {
+            ReservationTable.init();
+
+        };
+        ReservationTable = {
+            init: function() {
+                this.intGetData();
+            },
+            buildContractRecord: function (contractModel) {
+                $('#tableContract tbody ').append('<tr>' +
+                    '<td>' + contractModel.id +
+                    '</td>' +
+                    '<td>' + contractModel.codeReservation +
+                    '</td>' +
+                    '<td>' + contractModel.creationDate +
+                    '</td>' +
+                    '<td>' + contractModel.price +
+                    '</td>' +
+                    '<td>' + contractModel.checkInDate  +
+                    '</td>' +
+                    '<td>' + contractModel.chcekOutDate  +
+                    '</td>' +
+                    '<td>' + contractModel.comission+
+                    '</tr>'
+                );
+            },
+
+            intGetData: function() {
+
+                $.ajax({    
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    type: "GET",
+                    url: "/api/reservation",
+                    cache: false
+                }).done(function(json) {
+                    var contracts = $.parseJSON(json);
+                    $.each(contracts, function(index, value) {
+                        ReservationTable.buildContractRecord(value);
+                    });
+                }).fail(function(d) {
+
+                });
+            }
+
+        };
+        
+    </script>
+</head>
+    <body onload="myFunction()">
+        <div class="row-fluid">
+            <div class="col-sm-12">
+                <table cellpadding="0" cellspacing="0" border="0"
+                       class="table table-striped table-bordered center-table"
+                       id="tableContract">
+                    <thead>
+                        <tr>
+                            <th> Id</th>
+                            <th> Kod Rezerwacji </th>
+                            <th> Daty utworzenia</th>
+                            <th> Cena</th>
+                            <th> Data zameldowania</th>
+                            <th> Data wymeldowania </th>
+                            <th> Prowizja</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+
+</html>
